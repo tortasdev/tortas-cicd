@@ -1,17 +1,14 @@
-# Use the official Jenkins LTS as the base image
+# Use the official Jenkins LTS image as the base image
 FROM jenkins/jenkins:lts
 
-# Switch to root user for installation
+# Set environment variables (if needed)
+ENV JENKINS_HOME=/var/jenkins_home
+
+# Switch to the root user to perform necessary operations
 USER root
 
-# Install necessary packages
-RUN apt-get update && \
-    apt-get install -y \
-    openjdk-11-jdk \
-    && apt-get clean
+# Create the Jenkins home directory if it doesn't exist
+RUN mkdir -p $JENKINS_HOME && chown -R jenkins:jenkins $JENKINS_HOME
 
-# Switch back to Jenkins user
+# Switch back to the jenkins user
 USER jenkins
-
-# Expose Jenkins port
-EXPOSE 8080
